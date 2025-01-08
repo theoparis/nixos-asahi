@@ -85,6 +85,7 @@
       foot
       wl-clipboard
       bemenu
+      prismlauncher
     ];
     shell = pkgs.nushell;
   };
@@ -110,6 +111,8 @@
   networking.firewall.enable = false;
 
   environment.systemPackages = with pkgs; [
+    rizinPlugins.rz-ghidra
+    rizin
     helix
     gitMinimal
     curlHTTP3
