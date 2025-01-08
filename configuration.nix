@@ -12,23 +12,23 @@
   nixpkgs.overlays = [
     (self: super: {
       # coreutils = super.callPackage ./packages/coreutils.nix {};
-      python3 = super.python313;
-      elfutils = super.elfutils.overrideAttrs (previous: {
-        patches = [
-          ./packages/elfutils/cxx-header-collision.patch
-        ];
-      });
-      nix = super.nix.overrideAttrs (previous: {
-        doCheck = false;
-        doInstallCheck = false;
-      });
+      # elfutils = super.elfutils.overrideAttrs (previous: {
+      # patches = [
+      # ./packages/elfutils/cxx-header-collision.patch
+      # ];
+      # });
+      # nix = super.nix.overrideAttrs (previous: {
+      # doCheck = false;
+      # doInstallCheck = false;
+      # });
     })
   ];
 
   nixpkgs.buildPlatform = "aarch64-linux";
   nixpkgs.hostPlatform.config = "aarch64-unknown-linux-gnu";
-  nixpkgs.hostPlatform.useLLVM = true;
-  nixpkgs.hostPlatform.linker = "lld";
+  # FIXME: causes nix to OOM during eval???
+  #nixpkgs.hostPlatform.useLLVM = true;
+  #nixpkgs.hostPlatform.linker = "lld";
 
   nix.settings.experimental-features = [
     "nix-command"
@@ -55,7 +55,19 @@
     pulse.enable = true;
   };
 
-  services.libinput.enable = true;
+  fonts.packages = [
+    pkgs.nerd-fonts.comic-shanns-mono
+    pkgs.noto-fonts-color-emoji
+  ];
+
+  environment.variables.EDITOR = "hx";
+
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = false;
+  };
+
+  # services.libinput.enable = true;
 
   users.users.theo = {
     isNormalUser = true;
@@ -68,13 +80,18 @@
     ];
     packages = with pkgs; [
       vulkan-tools
+      # TODO: Rio has vulkan issues https://github.com/gfx-rs/wgpu/issues/6320
+      # rio
+      foot
+      bemenu
     ];
     shell = pkgs.nushell;
   };
 
+  hardware.graphics.enable = true;
   hardware.asahi = {
     useExperimentalGPUDriver = true;
-    extractPeripheralFirmware = false;
+    peripheralFirmwareDirectory = ./firmware;
   };
 
   programs.firefox.enable = true;
@@ -95,6 +112,11 @@
     nixfmt-rfc-style
     nix-output-monitor
     fastfetch
+    uutils-coreutils-noprefix
+    ripgrep
+    fd
+    sd
+    bottom
   ];
 
   programs.gnupg.agent = {

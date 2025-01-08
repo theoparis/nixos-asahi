@@ -61,7 +61,9 @@
           nixpkgs.overlays = [
             (final: prev: {
               # prevent cross-built Mesas that might be evaluated using this config (e.g. Steam emulation via box64) from using the special Asahi Mesa
-              mesa = if prev.targetPlatform.isAarch64 then final.mesa-asahi-edge else prev.mesa;
+              mesa = final.callPackage ../../packages/mesa-asahi-edge {
+                mesa = prev.mesa;
+              };
             })
           ];
         })
@@ -84,7 +86,7 @@
       "replace"
       "overlay"
     ];
-    default = "replace";
+    default = "overlay";
     description = ''
       Mode to use to install the experimental GPU driver into the system.
 

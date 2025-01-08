@@ -9,7 +9,8 @@
   src = fetchgit {
     url = "https://source.denx.de/u-boot/u-boot.git";
     rev = "6d41f0a39d6423c8e57e92ebbe9f8c0333a63f72";
-    hash = "sha256-gtXt+BglBdEKW7j3U2x2QeKGeDH1FdmAMPXk+ntkROo=";
+    hash = "sha256-G3yK6F6asu2MKC/xjp14tSlrG48lc76whwj2aJdBO8Q=";
+    fetchSubmodules = false;
   };
   version = "mainline";
 
