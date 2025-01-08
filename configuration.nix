@@ -83,9 +83,19 @@
       # TODO: Rio has vulkan issues https://github.com/gfx-rs/wgpu/issues/6320
       # rio
       foot
+      wl-clipboard
       bemenu
     ];
     shell = pkgs.nushell;
+  };
+
+  security.wrappers = {
+    ffmpeg = {
+      owner = "root";
+      group = "root";
+      capabilities = "cap_sys_admin+ep";
+      source = "${pkgs.ffmpeg}/bin/ffmpeg";
+    };
   };
 
   hardware.graphics.enable = true;
@@ -117,6 +127,8 @@
     fd
     sd
     bottom
+    mpv
+    ffmpeg
   ];
 
   programs.gnupg.agent = {
