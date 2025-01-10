@@ -9,24 +9,17 @@
     ./apple-silicon-support
   ];
 
-  nixpkgs.overlays = [
-    (self: super: {
-      # coreutils = super.callPackage ./packages/coreutils.nix {};
-      # elfutils = super.elfutils.overrideAttrs (previous: {
-      # patches = [
-      # ./packages/elfutils/cxx-header-collision.patch
-      # ];
-      # });
-      # nix = super.nix.overrideAttrs (previous: {
-      # doCheck = false;
-      # doInstallCheck = false;
-      # });
-    })
+  nix.settings.trusted-users = [
+    "root"
+    "@wheel"
   ];
+
+  nix.settings.substituters = [ "https://aseipp-nix-cache.freetls.fastly.net" ];
 
   nixpkgs.buildPlatform = "aarch64-linux";
   nixpkgs.hostPlatform.config = "aarch64-unknown-linux-gnu";
   # FIXME: causes nix to OOM during eval???
+  # See https://github.com/NixOS/nix/issues/12153
   #nixpkgs.hostPlatform.useLLVM = true;
   #nixpkgs.hostPlatform.linker = "lld";
 
@@ -70,8 +63,6 @@
     xwayland.enable = false;
   };
 
-  # services.libinput.enable = true;
-
   users.users.theo = {
     isNormalUser = true;
     extraGroups = [
@@ -84,11 +75,15 @@
     packages = with pkgs; [
       vulkan-tools
       # TODO: Rio has vulkan issues https://github.com/gfx-rs/wgpu/issues/6320
-      # rio
-      foot
+      rio
+      #foot
       wl-clipboard
       bemenu
       prismlauncher
+      mpv
+      hyprshade
+      slurp
+      grim
     ];
     shell = pkgs.nushell;
   };
@@ -116,7 +111,8 @@
   environment.systemPackages = with pkgs; [
     rizinPlugins.rz-ghidra
     rizin
-    helix
+    neovim
+    stow
     gitMinimal
     curlHTTP3
     jujutsu
@@ -133,8 +129,14 @@
     fd
     sd
     bottom
-    mpv
     ffmpeg
+    zellij
+    hyperfine
+    starship
+    zoxide
+    bat
+    mdbook
+    qemu
   ];
 
   programs.gnupg.agent = {
