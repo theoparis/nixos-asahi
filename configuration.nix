@@ -43,6 +43,11 @@
 
   services.printing.enable = true;
 
+  programs.adb.enable = true;
+  services.udev.packages = [
+    pkgs.android-udev-rules
+  ];
+
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
 
@@ -71,6 +76,7 @@
       "video"
       "audio"
       "seat"
+      "adbusers"
     ];
     packages = with pkgs; [
       vulkan-tools
@@ -135,8 +141,10 @@
     starship
     zoxide
     bat
+    skim
     mdbook
     qemu
+    deno
   ];
 
   programs.gnupg.agent = {
