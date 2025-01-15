@@ -9,12 +9,20 @@
     ./apple-silicon-support
   ];
 
+  nix.package = pkgs.nixVersions.git;
   nix.settings.trusted-users = [
     "root"
     "@wheel"
   ];
 
-  nix.settings.substituters = [ "https://aseipp-nix-cache.freetls.fastly.net" ];
+  nix.settings.substituters = [
+    "https://aseipp-nix-cache.freetls.fastly.net"
+    "https://cache.garnix.io"
+  ];
+  nix.settings.trusted-public-keys = [
+    "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
+    "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+  ];
 
   nixpkgs.buildPlatform = "aarch64-linux";
   nixpkgs.hostPlatform.config = "aarch64-unknown-linux-gnu";
@@ -80,9 +88,7 @@
     ];
     packages = with pkgs; [
       vulkan-tools
-      # TODO: Rio has vulkan issues https://github.com/gfx-rs/wgpu/issues/6320
       rio
-      #foot
       wl-clipboard
       bemenu
       prismlauncher
@@ -118,6 +124,7 @@
     rizinPlugins.rz-ghidra
     rizin
     neovim
+    helix
     stow
     gitMinimal
     curlHTTP3
@@ -145,6 +152,8 @@
     mdbook
     qemu
     deno
+    gnumake
+    jdk23
   ];
 
   programs.gnupg.agent = {
