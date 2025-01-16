@@ -124,7 +124,6 @@
     rizinPlugins.rz-ghidra
     rizin
     neovim
-    helix
     stow
     gitMinimal
     curlHTTP3
@@ -135,6 +134,7 @@
     libarchive
     nil
     nixfmt-rfc-style
+    stylua
     nix-output-monitor
     fastfetch
     uutils-coreutils-noprefix
